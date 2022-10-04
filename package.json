@@ -1,0 +1,20 @@
+{
+    "name": "webdriverio-tests",
+    "version": "0.1.0",
+    "private": true,
+    "devDependencies": {
+        "@percy/cli": "^1.10.2",
+        "@percy/webdriverio": "^2.0.2",
+        "@wdio/cli": "^7.24.0",
+        "@wdio/local-runner": "^7.24.0",
+        "@wdio/mocha-framework": "^7.24.0",
+        "@wdio/spec-reporter": "^7.24.0",
+        "chromedriver": "^105.0.0",
+        "wdio-chromedriver-service": "^7.3.2"
+    },
+    "scripts": {
+        "wdio": "wdio run wdio.conf.js",
+        "percy-batched": "percy exec --config .percy-batched.yml -- npm run wdio --spec ./test/specs/example.batched.js",
+        "percy-single": "percy exec --config .percy-single.yml -- npm run wdio --spec ./test/specs/example.single.js"
+    }
+}
