@@ -17,11 +17,23 @@ This repo will allow you to compare your pdfs on percy.
     3. update the URL (where your repo is hosted locally) in the `example.batched.js` and `example.single.js`.
  4. Run `npm run pery-batched` or `npm run percy-single`.
  
- #### Use Cases
-  1. Comparing long pdfs with a lot of visual data
-  2. Comapring Figma designs
-  3. You tell me
+#### Results!
+ ![Screenshot 2022-10-04 at 6 50 14 PM](https://user-images.githubusercontent.com/53310042/193829894-513c5ded-1728-4a66-a2eb-b4da4a81dc73.png)
+![Screenshot 2022-10-04 at 6 51 55 PM](https://user-images.githubusercontent.com/53310042/193830310-b33cb035-bd28-4e1f-8de0-4c1f2651ee93.png)
+
+#### Use Cases
+ 1. Comparing long pdfs with a lot of visual data.
+ 2. Comapring Figma designs.
+ 3. You tell me.
   
- #### Next steps
-  1. Simplify the above mentioned process.
-  2. Explore pdf - website comparison. 
+#### Next steps
+ 1. Simplify the above mentioned process.
+ 2. Explore pdf - website comparison. 
+
+#### FAQ
+ 1. Is there a limit on pdf length that can be compared?
+    - Nope, there is not limit on the length of the pdf.
+ 2. How is this different from image comparisons?
+    - This library parses pdf to html and percy will compare dom elements and hence the results will be more  accurate.
+    - You can use percy features like scope and percy-css that will allow you to focus or ignore parts of your pdf.
+    - you tell me.
