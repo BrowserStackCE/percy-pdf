@@ -1,0 +1,21 @@
+version: 2
+snapshot:
+  percy-css: |
+    .textLayer { overflow: unset !important; }
+    .pdfViewer .canvasWrapper { overflow: unset !important; }
+    .page { overflow: unset !important; }
+    #viewerContainer { overflow: unset !important; }
+  widths:
+    - 375
+    - 1280
+  minHeight: 1024
+  
+discovery:
+  allowedHostnames: []
+  networkIdleTimeout: 100
+static:
+  cleanUrls: false
+upload:
+  files: "**/*.{png,jpg,jpeg}"
+  ignore: ""
+  stripExtensions: false
