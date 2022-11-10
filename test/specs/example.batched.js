@@ -10,7 +10,7 @@ describe('My Login application', () => {
         const loadtime_per_page = 2000; // >1sec
         const initial_loadtime = 40000; // >30 sec
 
-        await browser.url(`http://localhost:8888/web/viewer.html?file=%2Ftest%2Fpdfs%2Fscreenshot-bc9581d0dd_new.pdf`);
+        await browser.url("YOUR_PDF_URL_WHICH_IS_HOSTED_USING_PDFJS");
         await browser.pause(initial_loadtime);
         //get all the pages
         const pages = await $('.pdfViewer').$$('.page');
