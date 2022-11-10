@@ -11,10 +11,11 @@ This repo will allow you to compare your pdfs on percy.
 #### Getting started
  1. Create an account on percy and setup a new project. Copy the `PERCY_TOKEN` as will need it in the following steps.
  2. Load your pdf using the pdf.js Library by following the steps mentioned [here](https://github.com/mozilla/pdf.js#getting-started).
+    1. once you complete the setup you will be able to see your PDF in the browser.
  3. Next, we need to clone this repo.
     1. cd to the root folder of the repo, npm install.
     2. export the `PERCY_TOKEN`.
-    3. update the URL (where your repo is hosted locally) in the `example.batched.js` and `example.single.js`.
+    3. update the URL in the `example.batched.js` and `example.single.js` (URL - Where you hosted your pdf using pdf.js).
  4. Run `npm run pery-batched` or `npm run percy-single`.
  
 #### Results!
