@@ -14,7 +14,7 @@ This repo will allow you to compare your pdfs on percy.
     1. once you complete the setup you will be able to see your PDF in the browser.
     2. make a note of the URL
  3. Next, we need to clone this repo.
-    1. cd to the root folder of the repo, npm install.
+    1. cd to the root folder of the repo and run `npm install`.
     2. export the `PERCY_TOKEN`.
     3. update the URL in the `example.batched.js` and `example.single.js` (URL - Where you hosted your pdf using pdf.js).
  4. Run `npm run pery-batched` or `npm run percy-single`.
