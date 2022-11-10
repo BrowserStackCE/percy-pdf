@@ -5,8 +5,9 @@ This repo will allow you to compare your pdfs on percy.
  1. First we parse the pdf into html using pdf.js by mozzila.
  2. We capture snapshots of the parsed webpage and send it to percy for comparison.
  3. There are two ways to capture snapshot.
-    1. Single page per snapshot - this is the recommended method as this will allow you to capture a lot of details.
-    2. Multiple pages per snapshot - if you have a usecase where you would want to capture multiple pages in togther in a single snapshot.
+    1. Single page per snapshot (Set group_pages = 1) - this is the recommended method as this will allow you to capture a lot of details.
+    2. Multiple pages per snapshot (Set group_pages >1) - if you have a usecase where you would want to capture multiple pages in togther in a single snapshot.
+   
    
 #### Getting started
  1. Create an account on percy and setup a new project. Copy the `PERCY_TOKEN` as will need it in the following steps.
