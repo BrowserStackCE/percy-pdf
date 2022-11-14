@@ -1,16 +1,17 @@
 const percySnapshot = require('@percy/webdriverio');
 
-describe('My Login application', () => {
-    it('should login with valid credentials', async () => {
+describe('Capture Spanshot', () => {
+    it('Should capture all pages', async () => {
     
         // need to group pages since batches doesn't have enough memory
         // to load up all the pages in the pdf
         // grouping will reduce the spanshot usage
-        const group_pages = 7; // group <9 pages in every spanshot
+        // by default grouping is disabled and is set to one
+        const group_pages = 1; // group <9 pages in every spanshot
         const loadtime_per_page = 2000; // >1sec
         const initial_loadtime = 40000; // >30 sec
 
-        await browser.url("YOUR_PDF_URL_WHICH_IS_HOSTED_USING_PDFJS");
+        await browser.url("http://localhost:8888/web/viewer.html?file=%2Ftest%2Fpdfs%2F%F0%9F%93%A6%203D%20models%20for%20your%20new%20app%20design%20(Community)%20new.pdf");
         await browser.pause(initial_loadtime);
         //get all the pages
         const pages = await $('.pdfViewer').$$('.page');
