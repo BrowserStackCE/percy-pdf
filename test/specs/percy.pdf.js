@@ -11,7 +11,7 @@ describe('Capture Spanshot', () => {
         const loadtime_per_page = 2000; // >1sec
         const initial_loadtime = 40000; // >30 sec
 
-        await browser.url("http://localhost:8888/web/viewer.html?file=%2Ftest%2Fpdfs%2F%F0%9F%93%A6%203D%20models%20for%20your%20new%20app%20design%20(Community)%20new.pdf");
+        await browser.url("http://localhost:8888/web/viewer.html?file=%2Ftest%2Fpdfs%2FShowText-ShadingPattern.pdf");
         await browser.pause(initial_loadtime);
         //get all the pages
         const pages = await $('.pdfViewer').$$('.page');
