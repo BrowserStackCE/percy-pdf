@@ -1,6 +1,6 @@
 version: 2
 snapshot:
-  scope: .pdfViewer .canvasWrapper #only use when group_pages = 1 
+  scope: .canvasWrapper #only use when group_pages = 1 
   percy-css: |
     .textLayer { overflow: unset !important; }
     .pdfViewer .canvasWrapper { overflow: unset !important; }

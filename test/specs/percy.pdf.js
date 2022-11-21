@@ -11,7 +11,7 @@ describe('Capture Spanshot', () => {
         const loadtime_per_page = 2000; // >1sec
         const initial_loadtime = 40000; // >30 sec
 
-        await browser.url("http://localhost:8888/web/viewer.html?file=%2Ftest%2Fpdfs%2F%F0%9F%93%A6%203D%20models%20for%20your%20new%20app%20design%20(Community)%20new.pdf");
+        await browser.url("http://localhost:8888/web/viewer.html?file=%2Ftest%2Fpdfs%2Flil%20news%20(Community).pdf");
         await browser.pause(initial_loadtime);
         //get all the pages
         const pages = await $('.pdfViewer').$$('.page');
@@ -27,7 +27,7 @@ describe('Capture Spanshot', () => {
                 // percy css to ignore pages after the current group
                 await percySnapshot(i+1+'-page', { 
                     percyCSS: `.pdfViewer .page:nth-of-type(n+${group_pages+1}) { display: none; }` 
-                  });
+                });
                 // delete the group for which spanshots are taken
                 for(let k=0; k<group_pages && i != num_of_pages-1 ; k++){
                     await browser.execute(async () => {
