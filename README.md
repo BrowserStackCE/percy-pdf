@@ -1,6 +1,9 @@
 ## percy-pdf
 This repo will allow you to compare your pdfs on percy.
 
+** IMPORTANT **
+This repository is not officially maintained by BrowserStack. The aim of the project is to allow users to compare PDF with PDF on Percy. We are currently looking if a Website to PDF comparison is something which can be reliably acheived. If you decide to use this repo and face any issues please go ahead and create issue on GitHub and the maintainer may consider developing that feature.
+
 #### How it works?
  1. First we parse the pdf into html using pdf.js by mozzila.
  2. We capture snapshots of the parsed webpage and send it to percy for comparison.
