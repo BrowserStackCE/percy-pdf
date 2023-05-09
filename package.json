@@ -4,24 +4,27 @@
     "description": "PDF Document Visual Automation Testing using Percy",
     "main": "tests/run.js",
     "scripts": {
-      "stop-server": "ps aux | grep http-server | awk '{print $2}' | xargs kill -9",
-      "start-server": "npx http-server -s -p 8080 pdfjs-3.4.120-dist &",
-      "pretest": "(npm run stop-server; exit 0) && npm run start-server",
-      "test": "node tests/run.js",
-      "posttest": "exit 0;"
+        "stop-server": "ps aux | grep http-server | awk '{print $2}' | xargs kill -9",
+        "start-server": "npx http-server -s -p 8080 pdfjs-3.4.120-dist &",
+        "pretest": "extract-zip ./pdfjs-3.4.120-dist.zip; (npm run stop-server; exit 0) && npm run start-server",
+        "test": "node tests/run.js",
+        "posttest": "exit 0;"
     },
     "keywords": [
-      "percy-pdf", "pdf-doc", "visual-testing", "percy"
+        "percy-pdf",
+        "pdf-doc",
+        "visual-testing",
+        "percy"
     ],
     "author": "samirans89",
     "license": "Apache License 2.0",
     "devDependencies": {
-      "@percy/cli": "^1.24.0"
+        "@percy/cli": "^1.24.0"
     },
     "dependencies": {
-      "fs": "0.0.1-security",
-      "http-server": "^14.1.1",
-      "js-yaml": "^4.1.0"
+        "extract-zip": "^2.0.1",
+        "fs": "0.0.1-security",
+        "http-server": "^14.1.1",
+        "js-yaml": "^4.1.0"
     }
-  }
-  
+}
