@@ -1,0 +1,25 @@
+- pdfDocId: DOC-0001
+  projectFolder: insurance-policy-docs
+  pdfFileName: Acme Inc - Private Car Stand Alone Own Damage Add-On Cover
+  pdfPageCount: 20
+  includePages: []
+  excludePages: []
+  runMode: configure-baseline
+  baselineDir: golden-copy
+- pdfDocId: DOC-0002
+  projectFolder: insurance-policy-docs
+  pdfFileName: Acme Inc - Private Car Stand Alone Own Damage Add-On Cover
+  pdfPageCount: 20
+  includePages: []
+  excludePages: []
+  runMode: configure-baseline
+  baselineDir: golden-copy
+- pdfDocId: DOC-0003
+  projectFolder: insurance-policy-docs
+  pdfFileName: Acme Inc - Private Car Stand Alone Own Damage Add-On Cover
+  pdfPageCount: 20
+  includePages: []
+  excludePages: []
+  runMode: configure-baseline
+  baselineDir: golden-copy
+  releaseDir: release-v2
