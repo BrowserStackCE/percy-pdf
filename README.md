@@ -64,7 +64,7 @@ This `percy-pdf` code repository provides an approach to compare your Portable D
 ### Frequently Asked  Questions (FAQs)
 1. How does the script identify which PDF files to compare with each other, under the &lt;project&gt;/&lt;&releasegt; directory?
 
-A: The PDF file name should match for any PDF file to be compared with any other file under the &lt;project&gt;/&lt;release&gt; directory. For e.g `insurance-policy-docs/release-v2/pdf-file-1.pdf` will be compared against `insurance-policy-docs/golden-copy/pdf-file-1.pdf`
+   The PDF file name should match for any PDF file to be compared with any other file under the &lt;project&gt;/&lt;release&gt; directory. For e.g `insurance-policy-docs/release-v2/pdf-file-1.pdf` will be compared against `insurance-policy-docs/golden-copy/pdf-file-1.pdf`
 
 ### Issue Tracking
 &lt;This section lists the reported issues for this repository&gt;
