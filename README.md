@@ -6,11 +6,11 @@ This `percy-pdf` code repository provides an approach to compare your Portable D
  2. The above command starts a local web server inside the `pdfjs-3.4.120-dist` folder and then triggers the `tests/run.js`
  3. At a high level, the `tests/run.js` script:
    - Copies the projects from the user's project folder (i.e. `./projects`) to the local web server folder (i.e.`pdfjs-3.4.120-dist/web`). The user's projects folder is expected contain the PDF files per application release for which you would like to run the PDF file visual comparisions.
-   - Iterates through the PDF Run Inforomation Config File provided while triggering the run to identify all the PDF files in scope:
+   - Iterates through the PDF Run Information Config File provided while triggering the run to identify all the PDF files in scope:
       - For creating a PDF baseline build within Percy
          OR 
       - For creating a new Percy build to compare new release PDF file with the existing PDF baseline.
- 4. Triggers a Percy build for every file within the PDF Run Inforomation Config File. Each page of the PDF file will be distinct screenshots on the Percy build.
+ 4. Triggers a Percy build for every file within the PDF Run Information Config File. Each page of the PDF file will be distinct screenshots on the Percy build.
    
    
 ### Getting Started
@@ -63,7 +63,8 @@ This `percy-pdf` code repository provides an approach to compare your Portable D
 
 ### Frequently Asked  Questions (FAQs)
 1. How does the script identify which PDF files to compare with each other, under the &lt;project&gt;/&lt;&releasegt; directory?
-A: The PDF file name should match for any PDF file to be compared with any other file under the &lt;project&gt;/&lt;&releasegt; directory. For e.g `insurance-policy-docs/release-v2/pdf-file-1.pdf` will be compared against `insurance-policy-docs/golden-copy/pdf-file-1.pdf`
+
+A: The PDF file name should match for any PDF file to be compared with any other file under the &lt;project&gt;/&lt;release&gt; directory. For e.g `insurance-policy-docs/release-v2/pdf-file-1.pdf` will be compared against `insurance-policy-docs/golden-copy/pdf-file-1.pdf`
 
 ### Issue Tracking
 &lt;This section lists the reported issues for this repository&gt;
