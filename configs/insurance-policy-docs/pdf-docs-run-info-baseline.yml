@@ -8,16 +8,16 @@
   baselineDir: golden-copy
 - pdfDocId: DOC-0002
   projectFolder: insurance-policy-docs
-  pdfFileName: Acme Inc - Private Car Stand Alone Own Damage Add-On Cover
-  pdfPageCount: 20
+  pdfFileName: Acme Inc - Health Plus Policy
+  pdfPageCount: 52
   includePages: []
   excludePages: []
   runMode: configure-baseline
   baselineDir: golden-copy
 - pdfDocId: DOC-0003
   projectFolder: insurance-policy-docs
-  pdfFileName: Acme Inc - Private Car Stand Alone Own Damage Add-On Cover
-  pdfPageCount: 20
+  pdfFileName: Acme Inc - Burglary Insurance Policy (Commercial) Add-On Covers
+  pdfPageCount: 4
   includePages: []
   excludePages: []
   runMode: configure-baseline
