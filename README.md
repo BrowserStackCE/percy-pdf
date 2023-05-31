@@ -1,45 +1,75 @@
 ## percy-pdf
-This repo will allow you to compare your pdfs on percy.
+This `percy-pdf` code repository provides an approach to compare your Portable Document Format (PDF) files using Percy for visual testing requirements across multiple application releases.
 
-** IMPORTANT **
-This repository is not officially maintained by BrowserStack. The aim of the project is to allow users to compare PDF with PDF on Percy. We are currently looking if a Website to PDF comparison is something which can be reliably acheived. If you decide to use this repo and face any issues please go ahead and create an issue on GitHub and the maintainer may consider fixing/developing that feature.
-
-#### How it works?
- 1. First we parse the pdf into html using pdf.js by mozzila.
- 2. We capture snapshots of the parsed webpage and send it to percy for comparison.
- 3. There are two ways to capture snapshot.
-    1. Single page per snapshot (Set group_pages = 1) - this is the recommended method as this will allow you to capture a lot of details.
-    2. Multiple pages per snapshot (Set group_pages >1) - if you have a usecase where you would want to capture multiple pages in togther in a single snapshot.
+### How it works?
+ 1. This repository script can be run using `npm test -- <pdf-run-info-config-file-path.yml>`. The sample PDF run info config files are provided in the `./configs` folder
+ 2. The above command starts a local web server inside the `pdfjs-3.4.120-dist` folder and then triggers the `tests/run.js`
+ 3. At a high level, the `tests/run.js` script:
+   - Copies the projects from the user's project folder (i.e. `./projects`) to the local web server folder (i.e.`pdfjs-3.4.120-dist/web`). The user's projects folder is expected contain the PDF files per application release for which you would like to run the PDF file visual comparisions.
+   - Iterates through the PDF Run Information Config File provided while triggering the run to identify all the PDF files in scope:
+      - For creating a PDF baseline build within Percy
+         OR 
+      - For creating a new Percy build to compare new release PDF file with the existing PDF baseline.
+ 4. Triggers a Percy build for every file within the PDF Run Information Config File. Each page of the PDF file will be distinct screenshots on the Percy build.
    
    
-#### Getting started
- 1. Create an account on percy and setup a new project. Copy the `PERCY_TOKEN` as will need it in the following steps.
- 2. Load your pdf using the pdf.js Library by following the steps mentioned [here](https://github.com/mozilla/pdf.js#getting-started).
-    1. once you complete the setup you will be able to see your PDF in the browser.
-    2. make a note of the URL
- 3. Next, we need to clone this repo.
-    1. cd to the root folder of the repo and run `npm install`.
-    2. export the `PERCY_TOKEN`.
-    3. update the URL in the `percy.pdf.js`
- 4. Run `npm run pery-pdf`
+### Getting Started
+ 1. Copy PDF files that you'd like to visually compare in the `projects` folder, within this repository.     Please ensure that these PDF documents are grouped based on `<project-name>` and then the `<release-version>`. A typical directory structure would like:
+   - projects
+      - insurance-policy-docs <-- project-name-folder
+         - golden-copy
+            - pdf-file-1.pdf
+            - pdf-file-2.pdf
+            - pdf-file-3.pdf
+         - release-v2
+            - pdf-file-1.pdf
+            - pdf-file-2.pdf
+            - pdf-file-3.pdf
+         - release-v3
+            - pdf-file-1.pdf
+            - pdf-file-2.pdf
+            - pdf-file-3.pdf
+         - and so on.
  
-#### Results!
- ![Screenshot 2022-10-04 at 6 50 14 PM](https://user-images.githubusercontent.com/53310042/193829894-513c5ded-1728-4a66-a2eb-b4da4a81dc73.png)
-![Screenshot 2022-10-04 at 6 51 55 PM](https://user-images.githubusercontent.com/53310042/193830310-b33cb035-bd28-4e1f-8de0-4c1f2651ee93.png)
+      Note: A sample project folder has been provided with this repository (i.e. `insurance-policy-docs`). It further has different folders such as `golden-copy`, `release-v2` indicating different versions of the PDF documents. You can create as many new folders as you'd like for each new release of the PDF document.
 
-#### Use Cases
- 1. Comparing long pdfs with a lot of visual data.
- 2. Comapring Figma designs.
- 3. You tell me.
-  
-#### Next steps
- 1. Simplify the above mentioned process.
- 2. Explore pdf - website comparison. 
+ 2. Create a PDF Run Info Config file within the `./configs` folder. Sample config files are provided here: `./configs/insurance-policy-docs` 
+ 3. Create an account on [Percy](https://percy.io) and create a new project. Note the Project specific `PERCY_TOKEN`, as this will be required while triggering the project builds.
+      ```
+      For *nix based and Mac machines:
+      export PERCY_TOKEN=<percy-project-token>
+      
+      For Windows:
+      set PERCY_TOKEN=<percy-project-token>
+      ```
+ 4. Clone this repository and move to the project folder.
+      ```
+      git clone git@github.com:BrowserStackCE/percy-pdf.git
+      cd percy-pdf
+      ```
+ 5. Ensure you are using the latest LTS version of Node.js. You can install the latest LTS Node.js version from [here](https://nodejs.org/en). We have tested this solution using Node 18.16.0 LTS.
+ 5. Install the repository dependencies:
+      ```
+      npm install
+      ```
+ 6. Export the environment variable `PERCY_TOKEN`. Set it to the token obtained in step 1.
+ 7. Trigger the run:
+      ```
+      npm test -- <run-info-config-file-path.yml>
+      e.g.
+      npm test -- configs/insurance-policy-docs/pdf-docs-run-info-baseline.yml
+      npm test -- configs/insurance-policy-docs/pdf-docs-run-info-release2.yml
+      ```
 
-#### FAQ
- 1. Is there a limit on pdf length that can be compared?
-    - Nope, there is not limit on the length of the pdf.
- 2. How is this different from image comparisons?
-    - This library parses pdf to html and percy will compare dom elements and hence the results will be more  accurate.
-    - You can use percy features like scope and percy-css that will allow you to focus or ignore parts of your pdf.
-    - you tell me.
+### Frequently Asked  Questions (FAQs)
+1. How does the script identify which PDF files to compare with each other, under the &lt;project&gt;/&lt;&releasegt; directory?
+
+   The PDF file name should match for any PDF file to be compared with any other file under the &lt;project&gt;/&lt;release&gt; directory. For e.g `insurance-policy-docs/release-v2/pdf-file-1.pdf` will be compared against `insurance-policy-docs/golden-copy/pdf-file-1.pdf`
+
+### Issue Tracking
+&lt;This section lists the reported issues for this repository&gt;
+
+
+### Disclaimer
+
+This repository is provided on a `pro-bono` basis by the Customer Engineering team at BrowserStack. It uses a simple NodeJS script to iterate through the PDF documents, as per the user configurations provided in the `./configs` directory, create the equivalent `percy snapshot` command-specific configuration, and trigger the Percy build for comparing the PDF files across different PDF pages. In case, you decide to use this repository and face any issues, you can submit an New Issue using the Issues tab on the GitHub repository and the maintainer(s) may consider fixing the reported issue or developing the requested feature.

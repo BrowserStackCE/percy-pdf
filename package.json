@@ -1,21 +1,30 @@
 {
-    "name": "webdriverio-tests",
-    "version": "0.1.0",
-    "private": true,
-    "devDependencies": {
-        "@percy/cli": "^1.14.0",
-        "@percy/webdriverio": "^2.0.2",
-        "@wdio/cli": "^7.24.0",
-        "@wdio/local-runner": "^7.24.0",
-        "@wdio/mocha-framework": "^7.24.0",
-        "@wdio/spec-reporter": "^7.24.0",
-        "chromedriver": "^105.0.0",
-        "wdio-chromedriver-service": "^7.3.2"
-    },
+    "name": "percy-pdf",
+    "version": "0.2.0",
+    "description": "PDF Document Visual Automation Testing using Percy",
+    "main": "tests/run.js",
     "scripts": {
-        "wdio-pdf": "wdio run wdio.pdf.js",
-        "wdio-website": "wdio run wdio.website.js",
-        "percy-pdf": "percy exec --config .percy-pdf.yml -- npm run wdio-pdf --spec ./test/specs/percy.pdf.js",
-        "percy-website": "percy exec --config .percy-pdf.yml -- npm run wdio-website --spec ./test/specs/percy.website.js"
+        "stop-server": "ps aux | grep http-server | awk '{print $2}' | xargs kill -9",
+        "start-server": "npx http-server -s -p 8080 pdfjs-3.4.120-dist &",
+        "pretest": "extract-zip ./pdfjs-3.4.120-dist.zip; (npm run stop-server; exit 0) && npm run start-server",
+        "test": "node tests/run.js",
+        "posttest": "exit 0;"
+    },
+    "keywords": [
+        "percy-pdf",
+        "pdf-doc",
+        "visual-testing",
+        "percy"
+    ],
+    "author": "samirans89",
+    "license": "Apache License 2.0",
+    "devDependencies": {
+        "@percy/cli": "^1.24.0"
+    },
+    "dependencies": {
+        "extract-zip": "^2.0.1",
+        "fs": "0.0.1-security",
+        "http-server": "^14.1.1",
+        "js-yaml": "^4.1.0"
     }
 }

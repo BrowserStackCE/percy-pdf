@@ -1,0 +1,16 @@
+version: 2
+snapshot:
+  widths:
+    - 1440
+  minHeight: 1024
+  scope: .canvasWrapper
+  percyCSS: |
+    .textLayer { overflow: unset !important; }
+    .pdfViewer .canvasWrapper { overflow: unset !important; }
+    .page { overflow: unset !important; }
+    #viewerContainer { overflow: unset !important; }
+discovery:
+  allowedHostnames: []
+  disallowedHostnames: []
+  networkIdleTimeout: 750
+  device-pixel-ratio: 2
