@@ -19,7 +19,7 @@
     "author": "samirans89",
     "license": "Apache License 2.0",
     "devDependencies": {
-        "@percy/cli": "^1.24.0"
+        "@percy/cli": "^1.25.0"
     },
     "dependencies": {
         "extract-zip": "^2.0.1",
