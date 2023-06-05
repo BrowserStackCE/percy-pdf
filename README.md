@@ -67,7 +67,10 @@ This `percy-pdf` code repository provides an approach to compare your Portable D
    The PDF file name should match for any PDF file to be compared with any other file under the &lt;project&gt;/&lt;release&gt; directory. For e.g `insurance-policy-docs/release-v2/pdf-file-1.pdf` will be compared against `insurance-policy-docs/golden-copy/pdf-file-1.pdf`
 
 ### Issue Tracking
-&lt;This section lists the reported issues for this repository&gt;
+#### Known Limitations
+1. The excludePages flag within the PDF Docs Run Info Config file does not allow excluding for PDF Page 1 and the second last page of the PDF.  
+
+
 
 
 ### Disclaimer
