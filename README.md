@@ -35,13 +35,6 @@ This `percy-pdf` code repository provides an approach to compare your Portable D
 
  2. Create a PDF Run Info Config file within the `./configs` folder. Sample config files are provided here: `./configs/insurance-policy-docs` 
  3. Create an account on [Percy](https://percy.io) and create a new project. Note the Project specific `PERCY_TOKEN`, as this will be required while triggering the project builds.
-      ```
-      For *nix based and Mac machines:
-      export PERCY_TOKEN=<percy-project-token>
-      
-      For Windows:
-      set PERCY_TOKEN=<percy-project-token>
-      ```
  4. Clone this repository and move to the project folder.
       ```
       git clone git@github.com:BrowserStackCE/percy-pdf.git
@@ -52,7 +45,14 @@ This `percy-pdf` code repository provides an approach to compare your Portable D
       ```
       npm install
       ```
- 6. Export the environment variable `PERCY_TOKEN`. Set it to the token obtained in step 1.
+ 6. Export the environment variable `PERCY_TOKEN`, obtained in step 3, using the command below.
+      ```
+      For *nix based and Mac machines:
+      export PERCY_TOKEN=<percy-project-token>
+      
+      For Windows:
+      set PERCY_TOKEN=<percy-project-token>
+      ```
  7. Trigger the run:
       ```
       npm test -- <run-info-config-file-path.yml>
@@ -62,7 +62,7 @@ This `percy-pdf` code repository provides an approach to compare your Portable D
       ```
 
 ### Frequently Asked  Questions (FAQs)
-1. How does the script identify which PDF files to compare with each other, under the &lt;project&gt;/&lt;&releasegt; directory?
+1. How does the script identify which PDF files to compare with each other, under the &lt;project&gt;/&lt;&release&gt; directory?
 
    The PDF file name should match for any PDF file to be compared with any other file under the &lt;project&gt;/&lt;release&gt; directory. For e.g `insurance-policy-docs/release-v2/pdf-file-1.pdf` will be compared against `insurance-policy-docs/golden-copy/pdf-file-1.pdf`
 
