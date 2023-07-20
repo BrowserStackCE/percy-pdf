@@ -1,0 +1,4 @@
+runMode: compare-release-with-baseline
+baselineDir: golden-copy
+releaseDir: release-v2
+projectFolders: [insurance-policy-docs, test-docs]

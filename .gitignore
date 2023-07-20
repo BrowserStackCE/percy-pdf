@@ -2,3 +2,4 @@ node_modules
 .percy-auto-generated-configs
 pdfjs-*
 .DS_Store
+.dist

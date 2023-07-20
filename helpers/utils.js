@@ -43,10 +43,19 @@ module.exports = {
     return fs.readFileSync(fileName, encoding);
   },
 
-  startExternalProcess: async function startExternalProcess(command, args, options) {
+  getDirNames: function getDirNames(dirPath) {
+    return fs.readdirSync(dirPath).filter((dir) => !dir.startsWith("."));
+  },
 
+  getFileNames: function getDirNames(dirPath, ext) {
+    return fs.readdirSync(dirPath).filter((fileName) => fileName.endsWith(ext));
+  },
+
+  startExternalProcess: async function startExternalProcess(
+    command,
+    args,
+    options
+  ) {
     return spawnSync(command, args, options);
-
-  }
-
+  },
 };
