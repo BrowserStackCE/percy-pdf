@@ -4,11 +4,11 @@
     "description": "PDF Document Visual Automation Testing using Percy",
     "main": "tests/run.js",
     "scripts": {
-        "stop-server": "kill $(lsof -t -i:8080)",
-        "start-server": "forever start -c npx http-server -s -p 8080 pdfjs-3.4.120-dist",
+        "stop-server": "forever stopall",
+        "start-server": "forever start \"node_modules/http-server/bin/http-server\" \"-s\" \"-p 8080\" \"pdfjs-3.4.120-dist\"",
         "pretest": "extract-zip ./pdfjs-3.4.120-dist.zip; npm run start-server",
         "test": "node tests/run.js",
-        "posttest": "stop-server; exit 0;"
+        "posttest": "npm run stop-server; exit 0;"
     },
     "keywords": [
         "percy-pdf",

@@ -251,9 +251,10 @@ async function processPdfDocsRunInfoConfigs(rootConfig) {
         }
 
         let allIncludedFilesMap = new Map();
-
+        // console.log(`Special Doc Configs: ${rootConfig["specialDocConfigs"]}`);
         if (rootConfig["specialDocConfigs"] != null) {
           rootConfig["specialDocConfigs"].forEach((specialConfig) => {
+           // console.log("Condition check: " + allIncludedFiles.includes(specialConfig["doc"]) && projectFolderName == specialConfig["project"])
             if (allIncludedFiles.includes(specialConfig["doc"]) && projectFolderName == specialConfig["project"]) {
               allIncludedFilesMap.set(specialConfig["doc"], {
                 includePages: specialConfig["includePages"],
