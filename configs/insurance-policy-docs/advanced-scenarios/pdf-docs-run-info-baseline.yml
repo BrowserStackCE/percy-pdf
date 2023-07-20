@@ -1,6 +1,6 @@
 runMode: create-baseline
-baselineDir: golden-copy
 projectFolders: [test-docs, insurance-policy-docs]
+baselineDir: golden-copy
 includeDocs:
   - project: insurance-policy-docs
     doc: Acme Inc - Private Car Stand Alone Own Damage Add-On Cover.pdf
