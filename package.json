@@ -6,7 +6,7 @@
     "scripts": {
         "stop-server": "forever stopall",
         "start-server": "forever start \"node_modules/http-server/bin/http-server\" \"-s\" \"-p 8080\" \"pdfjs-3.4.120-dist\"",
-        "pretest": "extract-zip ./pdfjs-3.4.120-dist.zip; npm run start-server",
+        "pretest": "ver && extract-zip %pwd%/pdfjs-3.4.120-dist.zip || extract-zip ./pdfjs-3.4.120-dist.zip; npm run start-server",
         "test": "node tests/run.js",
         "posttest": "npm run stop-server; exit 0;"
     },
@@ -19,7 +19,7 @@
     "author": "samirans89",
     "license": "Apache License 2.0",
     "devDependencies": {
-        "@percy/cli": "^1.26.1"
+        "@percy/cli": "^1.26.2"
     },
     "dependencies": {
         "concurrently": "^8.2.0",
