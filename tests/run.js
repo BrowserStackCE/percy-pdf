@@ -72,7 +72,7 @@ async function triggerPercyProcess(
   );
 }
 
-async function createPdfDocsRunInfoMap(
+function createPdfDocsRunInfoMap(
   rootConfig,
   allIncludedFilesMap,
   fileName,
@@ -126,7 +126,7 @@ async function createPdfDocsRunInfoMap(
   return pdfDocsRunInfoMap;
 }
 
-async function createPercySnapshotConfig(pdfDocsRunInfoMap) {
+function createPercySnapshotConfig(pdfDocsRunInfoMap) {
   let additionalSnapshotsForEachPage = [];
 
   let snapshotPagesArr = Array.from(
@@ -216,7 +216,7 @@ async function furtherCleanseYmlFile(ymlContent) {
   return ymlContent;
 }
 
-async function processPdfDocsRunInfoConfigs(rootConfig) {
+function processPdfDocsRunInfoConfigs(rootConfig) {
   try {
     if (rootConfig["projectFolders"] != null) {
       rootConfig["projectFolders"].forEach((projectFolderName) => {
@@ -270,14 +270,14 @@ async function processPdfDocsRunInfoConfigs(rootConfig) {
               return doc.numPages;
             });
 
-          let pdfDocsRunInfoMap = await createPdfDocsRunInfoMap(
+          let pdfDocsRunInfoMap = createPdfDocsRunInfoMap(
             rootConfig,
             allIncludedFilesMap,
             fileName,
             projectFolderName,
             pdfPageCount
           );
-          let snapshotConfigObj = await createPercySnapshotConfig(
+          let snapshotConfigObj = createPercySnapshotConfig(
             pdfDocsRunInfoMap
           );
 
@@ -315,7 +315,7 @@ async function processPdfDocsRunInfoConfigs(rootConfig) {
   try {
     await setup();
     let pdfDocsRunInfoConfigObj = await readPdfDocsRunInfoConfigs();
-    await processPdfDocsRunInfoConfigs(pdfDocsRunInfoConfigObj);
+    processPdfDocsRunInfoConfigs(pdfDocsRunInfoConfigObj);
   } catch (e) {
     console.error("Encountered Fatal Error: " + e);
     throw e;
