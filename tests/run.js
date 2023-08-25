@@ -36,10 +36,12 @@ let pdfDocsRunInfoMap = {}
 
 async function readArgs () {
   const args = process.argv.slice(2)
-  // Read PDF Docs Run Info Config File supplied by the user.
+  // Read PDF Docs Run Info Config File supplied by the user, as the first process argument.
   // If not found, throw an error and stop the run.
   if (args.length > 0) {
     defPdfConfigFilePath = args[0]
+
+    // Update PORT is provided by the user, as the second process argument
     if (args[1] != null) {
       PORT = args[1]
       pdfServerBaseUrl = `http://${HOST}:${PORT}`
@@ -177,7 +179,6 @@ async function createPercySnapshotConfig (pdfDocsRunInfoMap) {
     )} => [1,${snapshotPagesArr}]`
   )
   for (let index = 0; index < snapshotPagesArr.length; index++) {
-    // for(const item of snapshotPagesArr) {
     const item = snapshotPagesArr[index]
     const nextIndex = item
     let currentIndex = 1
@@ -294,7 +295,6 @@ async function processPdfDocsRunInfoConfigs (rootConfig) {
         }
 
         for (const fileName of allIncludedFiles) {
-          // allIncludedFiles.forEach(async (fileName) => {
           const pdfPageCount = await pdfjsLib
             .getDocument(`${projectReleaseFolderPath}/${fileName}`)
             .promise.then(function (doc) {
@@ -327,6 +327,9 @@ async function processPdfDocsRunInfoConfigs (rootConfig) {
             fileEncoding
           )
 
+          // Used when `createMultipleBuildsPerDoc: true` flag is provided in the PDF Run Info Config file.
+          // In this case, a new Percy build is created for every PDF documents in scope, across User Projects.
+
           if (
             rootConfig.createMultipleBuildsPerDoc != null &&
             rootConfig.createMultipleBuildsPerDoc
@@ -345,6 +348,7 @@ async function processPdfDocsRunInfoConfigs (rootConfig) {
   }
 }
 
+// Used by default to create a single Percy build for all the PDF documents in scope, across User Projects.
 async function triggerConsolidatedPercyRun () {
   const ymlConfigFiles = await utils.listFolderYmlFiles(
     percyAutoGenConfigFolder
