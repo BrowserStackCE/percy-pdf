@@ -43,18 +43,26 @@ This `percy-pdf` code repository provides an approach to compare your Portable D
       ```
  7. Trigger the run for the Getting Started Scenario:
       ```
-      npm test -- <run-info-config-file-path.yml>
+      npm test -- <run-info-config-file-path.yml> <Optional PORT Param. Default 8080>
       e.g.
-      npm test -- configs/insurance-policy-docs/getting-started-scenarios/pdf-docs-run-info-baseline.yml
-      npm test -- configs/insurance-policy-docs/getting-started-scenarios/pdf-docs-run-info-release2.yml
+      npm test -- configs/insurance-policy-docs/getting-started-scenarios/01_pdf-docs-run-info-baseline.yml
+      npm test -- configs/insurance-policy-docs/getting-started-scenarios/01_pdf-docs-run-info-release2.yml
+      ```
+
+      In case, you would like to provide a dynamic port value for the web server too, please provide the PORT as the second argument to the command:
+      ```
+      npm test -- <run-info-config-file-path.yml> <Optional PORT Param. Default 8080>
+      e.g.
+      npm test -- configs/insurance-policy-docs/getting-started-scenarios/01_pdf-docs-run-info-baseline.yml 8081
+      npm test -- configs/insurance-policy-docs/getting-started-scenarios/01_pdf-docs-run-info-release2.yml 8081
       ```
 8. You may want to trigger the Advanced Scenario in a similar fashion, once you have gone through the Advanced PDF Run Config File flags (and have relevant use cases), as documented in the section `PDF Run Config File` below.
 
       ```
       npm test -- <run-info-config-file-path.yml>
       e.g.
-      npm test -- configs/insurance-policy-docs/advanced-scenarios/pdf-docs-run-info-baseline.yml
-      npm test -- configs/insurance-policy-docs/advanced-scenarios/pdf-docs-run-info-release2.yml
+      npm test -- configs/insurance-policy-docs/advanced-scenarios/01_pdf-docs-run-info-baseline.yml
+      npm test -- configs/insurance-policy-docs/advanced-scenarios/01_pdf-docs-run-info-release2.yml
       ```
 
 ### PDF Run Config File
@@ -79,6 +87,7 @@ The PDF Run Info file provides a number of flags that provide information about 
       - project: the project folder for the document
       - doc: the doc name with the `.pdf` extension
 - specialDocConfigs (optional): This flag provides further customization to include / exclude certain pages of the any of the PDF documents. The specific document is identified using the `project` and `doc` flags and further flags `includePages` / `excludePages` are provided to include or exclude pages in the PDF document during baselining or comparision.
+- createMultipleBuildsPerDoc (default -> false): For any PDF Run Config file, by default -> A single build is created with clubs all PDF documents across User projects in a single Percy build. However, if the user wants to create a new Percy Build per PDF document, then `createMultipleBuildsPerDoc` can be optionally set to true.
 
 
 ### Internal Working  

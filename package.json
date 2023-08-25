@@ -6,7 +6,7 @@
     "scripts": {
         "stop-server": "npx forever stopall",
         "start-server": "npx forever start \"node_modules/http-server/bin/http-server\" \"-s\" \"-p 8080\" \"pdfjs-3.4.120-dist\"",
-        "pretest": "(ver && npx extract-zip %cd%/pdfjs-3.4.120-dist.zip || extract-zip ./pdfjs-3.4.120-dist.zip) && npm run start-server",
+        "pretest": "(ver && npx extract-zip %cd%/pdfjs-3.4.120-dist.zip || extract-zip ./pdfjs-3.4.120-dist.zip)",
         "test": "node tests/run.js",
         "posttest": "npm run stop-server && exit 0"
     },
@@ -19,7 +19,7 @@
     "author": "samirans89",
     "license": "Apache License 2.0",
     "devDependencies": {
-        "@percy/cli": "^1.26.2",
+        "@percy/cli": "^1.26.3",
         "eslint": "^8.45.0",
         "eslint-config-standard": "^17.1.0",
         "eslint-plugin-import": "^2.27.5",
@@ -27,11 +27,14 @@
         "eslint-plugin-promise": "^6.1.1"
     },
     "dependencies": {
+        "@alexlafroscia/yaml-merge": "^4.1.0",
+        "child_process": "^1.0.2",
         "extract-zip": "^2.0.1",
         "forever": "^0.14.2",
         "fs": "0.0.1-security",
         "http-server": "^14.1.1",
         "js-yaml": "^4.1.0",
+        "merge-yaml": "^1.1.0",
         "pdfjs-dist": "^3.7.107"
     }
 }

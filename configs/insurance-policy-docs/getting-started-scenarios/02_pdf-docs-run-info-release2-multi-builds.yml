@@ -1,0 +1,5 @@
+runMode: compare-release-with-baseline
+projectFolders: [insurance-policy-docs, test-docs]
+baselineDir: golden-copy
+releaseDir: release-v2
+createMultipleBuildsPerDoc: true
