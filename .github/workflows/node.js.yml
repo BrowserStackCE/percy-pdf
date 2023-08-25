@@ -26,4 +26,4 @@ jobs:
         continue-on-error: false
         env:
           PERCY_TOKEN: ${{ secrets.PERCY_TOKEN }}
-        run: npm test -- configs/insurance-policy-docs/getting-started-scenarios/pdf-docs-run-info-baseline.yml
+        run: npm test -- configs/insurance-policy-docs/getting-started-scenarios/01_pdf-docs-run-info-baseline.yml
