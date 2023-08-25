@@ -379,7 +379,7 @@ async function triggerConsolidatedPercyRun () {
   try {
     await readArgs()
     await setup()
-    utils.emptyFolder('.dist')
+    utils.emptyFolder(percyAutoGenConfigFolder)
     const pdfDocsRunInfoConfigObj = await readPdfDocsRunInfoConfigs()
     await processPdfDocsRunInfoConfigs(pdfDocsRunInfoConfigObj)
     if (
