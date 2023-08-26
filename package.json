@@ -1,6 +1,6 @@
 {
     "name": "percy-pdf",
-    "version": "0.2.0",
+    "version": "0.3.0",
     "description": "PDF Document Visual Automation Testing using Percy",
     "main": "tests/run.js",
     "scripts": {
