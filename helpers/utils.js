@@ -1,6 +1,8 @@
 const fs = require('fs')
-const { spawnSync } = require('child_process')
-const path = require('path')
+const { execSync, spawnSync } = require('child_process')
+const pdfjsLib = require('pdfjs-dist')
+const yaml = require('js-yaml')
+const merge = require('@alexlafroscia/yaml-merge')
 
 module.exports = {
   writeContentToFile: async function writeContentToFile (
@@ -55,9 +57,10 @@ module.exports = {
   startExternalProcess: async function startExternalProcess (
     command,
     args,
-    options
+    options,
+    separateShell
   ) {
-    return spawnSync(command, args, options)
+    return separateShell ? execSync(command, args, options) : spawnSync(command, args, options)
   },
 
   listFolderYmlFiles: async function listFolderYmlFiles (dirContPath) {
@@ -65,15 +68,65 @@ module.exports = {
     return dirCont.filter((elm) => elm.match(/.*\.(yml?)/ig)).map(el => `${dirContPath}/${el}`)
   },
 
-  emptyFolder: async function emptyFolder (dir) {
-    fs.readdir(dir, (err, files) => {
-      if (err) throw err
+  emptyDir: async function emptyDir (dir) {
+    fs.rmdirSync(dir, { recursive: true, force: true })
+  },
 
-      for (const file of files) {
-        fs.unlink(path.join(dir, file), (err) => {
-          if (err) throw err
+  createDir: async function createDir (dirPath) {
+    if (!fs.existsSync(dirPath)) {
+      fs.mkdirSync(dirPath)
+    }
+  },
+
+  getPDFPageCount: async function getPDFPageCount (pdfFilePath) {
+    return await pdfjsLib
+      .getDocument(pdfFilePath)
+      .promise.then(function (doc) {
+        return doc.numPages
+      })
+  },
+
+  mergeMultipleYmlFiles: async function mergeMultipleYmlFiles (...ymlConfigFiles) {
+    return merge(...ymlConfigFiles)
+  },
+
+  loadYmlObj: async function loadYmlObj (ymlStrContent) {
+    return yaml.load(ymlStrContent)
+  },
+
+  dumpObjToStr: async function dumpObjToStr (obj) {
+    return yaml.dump(obj)
+  },
+
+  filterDocs: async function filterDocs (pdfDocsToFilter, currentProjectFolder, fileList, includeFlag) {
+    return fileList.filter(function (el) {
+      const currProjectDocs = pdfDocsToFilter.filter(function (
+        docs
+      ) {
+        return docs.project === currentProjectFolder
+      })
+
+      if (includeFlag) {
+        return currProjectDocs.map((obj) => obj.doc).includes(el)
+      } else {
+        return !currProjectDocs.map((obj) => obj.doc).includes(el)
+      }
+    })
+  },
+
+  applySpecialDocConfigs: async function applySpecialDocConfigs (pdfRunInfoSpecialDocConfigs, projectFolderName, fileList) {
+    const specialConfigsMap = new Map()
+    pdfRunInfoSpecialDocConfigs.forEach((specialConfig) => {
+      if (
+        fileList.includes(specialConfig.doc) &&
+        projectFolderName === specialConfig.project
+      ) {
+        specialConfigsMap.set(specialConfig.doc, {
+          includePages: specialConfig.includePages,
+          excludePages: specialConfig.excludePages
         })
       }
     })
+    return specialConfigsMap
   }
 }

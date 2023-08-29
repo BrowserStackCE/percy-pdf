@@ -12,7 +12,7 @@ includeDocs:
     doc: Test-Acme Inc - Private Car Stand Alone Own Damage Add-On Cover.pdf
 excludeDocs:
   - project: insurance-policy-docs
-    doc: Acme Inc - Private Car Stand Alone Own Damage Add-On Cover.pdf
+    doc: Test-Acme Inc - Private Car Stand Alone Own Damage Add-On Cover.pdf
 specialDocConfigs:
   - project: insurance-policy-docs
     doc: Acme Inc - Private Car Stand Alone Own Damage Add-On Cover.pdf
@@ -26,4 +26,5 @@ specialDocConfigs:
     doc: Acme Inc - Burglary Insurance Policy (Commercial) Add-On Covers.pdf
     includePages: []
     excludePages: [2]
-createMultipleBuildsPerDoc: true
+percyConfigs:
+  waitForTimeout: 200

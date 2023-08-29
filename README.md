@@ -4,16 +4,16 @@ This `percy-pdf` code repository provides an approach to compare your Portable D
 ### Getting Started
  1. Copy PDF files that you'd like to visually compare in the `projects` folder, within this repository.     Please ensure that these PDF documents are grouped based on `<project-name>` and then the `<release-version>`. A typical directory structure would like:
    - projects
-      - insurance-policy-docs <-- project-name-folder
-         - golden-copy
+      - insurance-policy-docs <-- &lt;your-project-name-folder&gt;
+         - golden-copy <-- &lt;your-baseline-release-folder&gt;
             - pdf-file-1.pdf
             - pdf-file-2.pdf
             - pdf-file-3.pdf
-         - release-v2
+         - release-v2 <-- &lt;your-another-release-folder&gt;
             - pdf-file-1.pdf
             - pdf-file-2.pdf
             - pdf-file-3.pdf
-         - release-v3
+         - release-v3 <-- &lt;your-another-release-folder&gt;
             - pdf-file-1.pdf
             - pdf-file-2.pdf
             - pdf-file-3.pdf
@@ -21,7 +21,7 @@ This `percy-pdf` code repository provides an approach to compare your Portable D
  
       Note: A sample project folder has been provided with this repository (i.e. `insurance-policy-docs`). It further has different folders such as `golden-copy`, `release-v2` indicating different versions of the PDF documents. You can create as many new folders as you'd like for each new release of the PDF document.
 
- 2. Create a PDF Run Info Config file within the `./configs` folder. Sample config files are provided here: `./configs/insurance-policy-docs` 
+ 2. Create a PDF Run Info Config file within the `./configs` folder. Sample config files are provided here: `./configs` 
  3. Create an account on [Percy](https://percy.io) and create a new project. Note the Project specific `PERCY_TOKEN`, as this will be required while triggering the project builds.
  4. Clone this repository and move to the project folder.
       ```
@@ -45,24 +45,24 @@ This `percy-pdf` code repository provides an approach to compare your Portable D
       ```
       npm test -- <run-info-config-file-path.yml> <Optional PORT Param. Default 8080>
       e.g.
-      npm test -- configs/insurance-policy-docs/getting-started-scenarios/01_pdf-docs-run-info-baseline.yml
-      npm test -- configs/insurance-policy-docs/getting-started-scenarios/01_pdf-docs-run-info-release2.yml
+      npm test -- configs/getting-started-scenarios/01_pdf-docs-run-info-baseline.yml
+      npm test -- configs/getting-started-scenarios/01_pdf-docs-run-info-release2.yml
       ```
 
       In case, you would like to provide a dynamic port value for the web server too, please provide the PORT as the second argument to the command:
       ```
       npm test -- <run-info-config-file-path.yml> <Optional PORT Param. Default 8080>
       e.g.
-      npm test -- configs/insurance-policy-docs/getting-started-scenarios/01_pdf-docs-run-info-baseline.yml 8081
-      npm test -- configs/insurance-policy-docs/getting-started-scenarios/01_pdf-docs-run-info-release2.yml 8081
+      npm test -- configs/getting-started-scenarios/01_pdf-docs-run-info-baseline.yml 8081
+      npm test -- configs/getting-started-scenarios/01_pdf-docs-run-info-release2.yml 8081
       ```
 8. You may want to trigger the Advanced Scenario in a similar fashion, once you have gone through the Advanced PDF Run Config File flags (and have relevant use cases), as documented in the section `PDF Run Config File` below.
 
       ```
       npm test -- <run-info-config-file-path.yml>
       e.g.
-      npm test -- configs/insurance-policy-docs/advanced-scenarios/01_pdf-docs-run-info-baseline.yml
-      npm test -- configs/insurance-policy-docs/advanced-scenarios/01_pdf-docs-run-info-release2.yml
+      npm test -- configs/advanced-scenarios/01_pdf-docs-run-info-baseline.yml
+      npm test -- configs/advanced-scenarios/01_pdf-docs-run-info-release2.yml
       ```
 
 ### PDF Run Config File
@@ -87,7 +87,14 @@ The PDF Run Info file provides a number of flags that provide information about 
       - project: the project folder for the document
       - doc: the doc name with the `.pdf` extension
 - specialDocConfigs (optional): This flag provides further customization to include / exclude certain pages of the any of the PDF documents. The specific document is identified using the `project` and `doc` flags and further flags `includePages` / `excludePages` are provided to include or exclude pages in the PDF document during baselining or comparision.
-- createMultipleBuildsPerDoc (default -> false): For any PDF Run Config file, by default -> A single build is created with clubs all PDF documents across User projects in a single Percy build. However, if the user wants to create a new Percy Build per PDF document, then `createMultipleBuildsPerDoc` can be optionally set to true.
+- createNewBuildPerDoc (default -> false): For any PDF Run Config file, by default -> A single build is created with clubs all PDF documents across User projects in a single Percy build. However, if the user wants to create a new Percy Build per PDF document, then `createNewBuildPerDoc` can be optionally set to true.
+- percyConfigs.waitForTimeout (default: none):  Percy snapshot internal configuration that can be passed by the user through the PDF Run Info Config file. It specifies an amount of time to wait before capturing a snapshot in milliseconds. 
+  E.g. Below configuration will ensure Percy Snapshot command waits for 200 milliseconds before capturing the Snapshot.
+  
+  ```
+  percyConfigs:
+    waitForTimeout: 200
+  ```
 
 
 ### Internal Working  

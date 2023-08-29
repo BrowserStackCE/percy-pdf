@@ -2,12 +2,12 @@
     "name": "percy-pdf",
     "version": "0.3.0",
     "description": "PDF Document Visual Automation Testing using Percy",
-    "main": "tests/run.js",
+    "main": "app/run.js",
     "scripts": {
         "stop-server": "npx forever stopall",
         "start-server": "npx forever start \"node_modules/http-server/bin/http-server\" \"-s\" \"-p 8080\" \"pdfjs-3.4.120-dist\"",
         "pretest": "(ver && npx extract-zip %cd%/pdfjs-3.4.120-dist.zip || extract-zip ./pdfjs-3.4.120-dist.zip)",
-        "test": "node tests/run.js",
+        "test": "node app/run.js",
         "posttest": "npm run stop-server && exit 0"
     },
     "keywords": [

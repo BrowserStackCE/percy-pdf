@@ -1,7 +1,6 @@
-runMode: compare-release-with-baseline
-releaseDir: release-v2
+runMode: create-baseline
+projectFolders: [test-docs, insurance-policy-docs]
 baselineDir: golden-copy
-projects: [insurance-policy-docs, test-docs]
 includeDocs:
   - project: insurance-policy-docs
     doc: Acme Inc - Private Car Stand Alone Own Damage Add-On Cover.pdf
@@ -9,6 +8,8 @@ includeDocs:
     doc: Acme Inc - Health Plus Policy.pdf
   - project: insurance-policy-docs    
     doc: Acme Inc - Burglary Insurance Policy (Commercial) Add-On Covers.pdf
+  - project: test-docs
+    doc: Test-Acme Inc - Private Car Stand Alone Own Damage Add-On Cover.pdf
 excludeDocs:
   - project: insurance-policy-docs
     doc: Acme Inc - Private Car Stand Alone Own Damage Add-On Cover.pdf
@@ -16,12 +17,15 @@ specialDocConfigs:
   - project: insurance-policy-docs
     doc: Acme Inc - Private Car Stand Alone Own Damage Add-On Cover.pdf
     includePages: []
-    excludePages: []
+    excludePages: [4, 7]
   - project: insurance-policy-docs
     doc: Acme Inc - Health Plus Policy.pdf
-    includePages: []
-    excludePages: [4, 7]
+    includePages: [2, 4]
+    excludePages: []
   - project: insurance-policy-docs
     doc: Acme Inc - Burglary Insurance Policy (Commercial) Add-On Covers.pdf
     includePages: []
     excludePages: [2]
+createNewBuildPerDoc: true
+percyConfigs:
+  waitForTimeout: 200

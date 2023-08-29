@@ -25,4 +25,6 @@ specialDocConfigs:
     doc: Acme Inc - Burglary Insurance Policy (Commercial) Add-On Covers.pdf
     includePages: []
     excludePages: [2]
-createMultipleBuildsPerDoc: true
+createNewBuildPerDoc: true
+percyConfigs:
+  waitForTimeout: 200
