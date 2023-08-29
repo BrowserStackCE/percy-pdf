@@ -38,7 +38,7 @@ async function readArgs () {
     defPdfConfigFilePath = args[0]
 
     // Update PORT is provided by the user, as the second process argument
-    if (args[1] != null) {
+    if (args[1] != null && !isNaN(args[1])) {
       PORT = args[1]
       pdfServerBaseUrl = `http://${HOST}:${PORT}`
     }
