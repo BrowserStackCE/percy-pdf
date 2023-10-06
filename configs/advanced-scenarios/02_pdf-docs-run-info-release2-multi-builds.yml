@@ -1,7 +1,7 @@
 runMode: compare-release-with-baseline
 releaseDir: release-v2
 baselineDir: golden-copy
-projects: [insurance-policy-docs, test-docs]
+projectFolders: [insurance-policy-docs, test-docs]
 includeDocs:
   - project: insurance-policy-docs
     doc: Acme Inc - Private Car Stand Alone Own Damage Add-On Cover.pdf
