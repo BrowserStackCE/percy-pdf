@@ -69,7 +69,7 @@ module.exports = {
   },
 
   emptyDir: async function emptyDir (dir) {
-    fs.rmdirSync(dir, { recursive: true, force: true })
+    fs.rmSync(dir, { recursive: true, force: true })
   },
 
   createDir: async function createDir (dirPath) {
