@@ -19,7 +19,7 @@
     "author": "samirans89",
     "license": "Apache License 2.0",
     "devDependencies": {
-        "@percy/cli": "^1.26.3",
+        "@percy/cli": "^1.27.3",
         "eslint": "^8.45.0",
         "eslint-config-standard": "^17.1.0",
         "eslint-plugin-import": "^2.27.5",
@@ -27,14 +27,11 @@
         "eslint-plugin-promise": "^6.1.1"
     },
     "dependencies": {
-        "@alexlafroscia/yaml-merge": "^4.1.0",
-        "child_process": "^1.0.2",
         "extract-zip": "^2.0.1",
-        "forever": "^4.0.3",
+        "forever": "^0.14.2",
         "fs": "0.0.1-security",
         "http-server": "^14.1.1",
         "js-yaml": "^4.1.0",
-        "merge-yaml": "^1.1.0",
-        "pdfjs-dist": "^3.7.107"
+        "pdfjs-dist": "2.4.456"
     }
 }

@@ -2,7 +2,7 @@ const fs = require('fs')
 const { execSync, spawnSync } = require('child_process')
 const pdfjsLib = require('pdfjs-dist')
 const yaml = require('js-yaml')
-const merge = require('@alexlafroscia/yaml-merge')
+const merge = require('./yaml-merge')
 
 module.exports = {
   writeContentToFile: async function writeContentToFile (
@@ -60,12 +60,16 @@ module.exports = {
     options,
     separateShell
   ) {
-    return separateShell ? execSync(command, args, options) : spawnSync(command, args, options)
+    return separateShell
+      ? execSync(command, args, options)
+      : spawnSync(command, args, options)
   },
 
   listFolderYmlFiles: async function listFolderYmlFiles (dirContPath) {
     const dirCont = fs.readdirSync(dirContPath)
-    return dirCont.filter((elm) => elm.match(/.*\.(yml?)/ig)).map(el => `${dirContPath}/${el}`)
+    return dirCont
+      .filter((elm) => elm.match(/.*\.(yml?)/gi))
+      .map((el) => `${dirContPath}/${el}`)
   },
 
   emptyDir: async function emptyDir (dir) {
@@ -80,13 +84,15 @@ module.exports = {
 
   getPDFPageCount: async function getPDFPageCount (pdfFilePath) {
     return await pdfjsLib
-      .getDocument(pdfFilePath)
+      .getDocument(fs.readFileSync(pdfFilePath))
       .promise.then(function (doc) {
         return doc.numPages
       })
   },
 
-  mergeMultipleYmlFiles: async function mergeMultipleYmlFiles (...ymlConfigFiles) {
+  mergeMultipleYmlFiles: async function mergeMultipleYmlFiles (
+    ...ymlConfigFiles
+  ) {
     return merge(...ymlConfigFiles)
   },
 
@@ -98,11 +104,14 @@ module.exports = {
     return yaml.dump(obj)
   },
 
-  filterDocs: async function filterDocs (pdfDocsToFilter, currentProjectFolder, fileList, includeFlag) {
+  filterDocs: async function filterDocs (
+    pdfDocsToFilter,
+    currentProjectFolder,
+    fileList,
+    includeFlag
+  ) {
     return fileList.filter(function (el) {
-      const currProjectDocs = pdfDocsToFilter.filter(function (
-        docs
-      ) {
+      const currProjectDocs = pdfDocsToFilter.filter(function (docs) {
         return docs.project === currentProjectFolder
       })
 
@@ -114,7 +123,11 @@ module.exports = {
     })
   },
 
-  applySpecialDocConfigs: async function applySpecialDocConfigs (pdfRunInfoSpecialDocConfigs, projectFolderName, fileList) {
+  applySpecialDocConfigs: async function applySpecialDocConfigs (
+    pdfRunInfoSpecialDocConfigs,
+    projectFolderName,
+    fileList
+  ) {
     const specialConfigsMap = new Map()
     pdfRunInfoSpecialDocConfigs.forEach((specialConfig) => {
       if (
