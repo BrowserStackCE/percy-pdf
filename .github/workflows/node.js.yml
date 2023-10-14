@@ -1,0 +1,29 @@
+name: Percy PDF
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    types: [opened, labeled, unlabeled, synchronize]
+
+jobs:
+  test:
+    runs-on: [ubuntu-latest]
+
+    strategy:
+      matrix:
+        node-version: [18.x]
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+      - run: npm install
+      - name: Run test
+        id: test
+        continue-on-error: false
+        env:
+          PERCY_TOKEN: ${{ secrets.PERCY_TOKEN }}
+        run: npm test -- configs/getting-started-scenarios/01_pdf-docs-run-info-baseline.yml

@@ -1,0 +1,3 @@
+runMode: create-baseline
+projectFolders: [insurance-policy-docs, test-docs]
+baselineDir: golden-copy

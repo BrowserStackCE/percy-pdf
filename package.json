@@ -1,14 +1,14 @@
 {
     "name": "percy-pdf",
-    "version": "0.2.0",
+    "version": "0.3.0",
     "description": "PDF Document Visual Automation Testing using Percy",
-    "main": "tests/run.js",
+    "main": "app/run.js",
     "scripts": {
-        "stop-server": "ps aux | grep http-server | awk '{print $2}' | xargs kill -9",
-        "start-server": "npx http-server -s -p 8080 pdfjs-3.4.120-dist &",
-        "pretest": "extract-zip ./pdfjs-3.4.120-dist.zip; (npm run stop-server; exit 0) && npm run start-server",
-        "test": "node tests/run.js",
-        "posttest": "exit 0;"
+        "stop-server": "npx forever stopall",
+        "start-server": "npx forever start \"node_modules/http-server/bin/http-server\" \"-s\" \"-p 8080\" \"pdfjs-3.4.120-dist\"",
+        "pretest": "(ver && npx extract-zip %cd%/pdfjs-3.4.120-dist.zip || extract-zip ./pdfjs-3.4.120-dist.zip)",
+        "test": "node app/run.js",
+        "posttest": "npm run stop-server && exit 0"
     },
     "keywords": [
         "percy-pdf",
@@ -19,12 +19,19 @@
     "author": "samirans89",
     "license": "Apache License 2.0",
     "devDependencies": {
-        "@percy/cli": "^1.26.1"
+        "@percy/cli": "^1.27.3",
+        "eslint": "^8.45.0",
+        "eslint-config-standard": "^17.1.0",
+        "eslint-plugin-import": "^2.27.5",
+        "eslint-plugin-n": "^16.0.1",
+        "eslint-plugin-promise": "^6.1.1"
     },
     "dependencies": {
         "extract-zip": "^2.0.1",
+        "forever": "^0.14.2",
         "fs": "0.0.1-security",
         "http-server": "^14.1.1",
-        "js-yaml": "^4.1.0"
+        "js-yaml": "^4.1.0",
+        "pdfjs-dist": "2.4.456"
     }
 }
