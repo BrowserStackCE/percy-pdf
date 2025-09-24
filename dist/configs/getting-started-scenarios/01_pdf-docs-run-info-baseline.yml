@@ -1,0 +1,3 @@
+runMode: create-baseline
+projectFolders: [sample-policy-docs, test-dummy-docs]
+baselineDir: golden-copy

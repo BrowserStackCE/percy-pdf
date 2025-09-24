@@ -1,12 +1,12 @@
 'use strict'
 
-const readFileSync = require('fs').readFileSync
-const jsYaml = require('js-yaml')
-const glob = require('glob')
-const _ = require('lodash')
+import fs from 'fs'
+import jsYaml from 'js-yaml'
+import { glob } from 'glob'
+import _ from 'lodash'
 
 function readAsJSON (fileName) {
-  const fileBuffer = readFileSync(fileName)
+  const fileBuffer = fs.readFileSync(fileName)
   const fileString = fileBuffer.toString()
 
   return jsYaml.load(fileString)
@@ -18,7 +18,7 @@ function readAsJSON (fileName) {
  * @param {array} from the file paths to read from
  * @return {string} the output YAML file
  */
-function yamlMerge (...from) {
+export function yamlMerge (...from) {
   const files = from
     .reduce((arr, el) => arr.concat(glob.sync(el)), [])
     .map((path) => readAsJSON(path))
@@ -34,5 +34,3 @@ function yamlMerge (...from) {
 
   return jsYaml.dump(outputJSON)
 }
-
-module.exports = yamlMerge

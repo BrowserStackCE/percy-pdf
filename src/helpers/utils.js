@@ -1,10 +1,9 @@
-const fs = require('fs')
-const { execSync, spawnSync } = require('child_process')
-const pdfjsLib = require('pdfjs-dist')
-const yaml = require('js-yaml')
-const merge = require('./yaml-merge')
+import fs from 'fs'
+import { getDocument } from 'pdfjs-dist/legacy/build/pdf.mjs'
+import yaml from 'js-yaml'
+import { yamlMerge } from './yaml-merge.js'
 
-module.exports = {
+export const utils = {
   writeContentToFile: async function writeContentToFile (
     content,
     folder,
@@ -35,6 +34,17 @@ module.exports = {
     })
   },
 
+  fileExists: async function fileExists (fileOrFolderName) {
+    if (fs.existsSync(fileOrFolderName)) {
+      return true
+    }
+  },
+
+  copyFile: async function copyFile (src, dest) {
+    const data = fs.readFileSync(src)
+    fs.writeFileSync(dest, data)
+  },
+
   copyFolder: async function copyFolder (
     sourceFolder,
     destinationFolder,
@@ -52,17 +62,6 @@ module.exports = {
 
   getFileNames: function getDirNames (dirPath, ext) {
     return fs.readdirSync(dirPath).filter((fileName) => fileName.endsWith(ext))
-  },
-
-  startExternalProcess: async function startExternalProcess (
-    command,
-    args,
-    options,
-    separateShell
-  ) {
-    return separateShell
-      ? execSync(command, args, options)
-      : spawnSync(command, args, options)
   },
 
   listFolderYmlFiles: async function listFolderYmlFiles (dirContPath) {
@@ -83,9 +82,9 @@ module.exports = {
   },
 
   getPDFPageCount: async function getPDFPageCount (pdfFilePath) {
-    return await pdfjsLib
-      .getDocument(fs.readFileSync(pdfFilePath))
-      .promise.then(function (doc) {
+    const loadingTask = getDocument(pdfFilePath)
+    return await loadingTask.promise
+      .then(function (doc) {
         return doc.numPages
       })
   },
@@ -93,7 +92,7 @@ module.exports = {
   mergeMultipleYmlFiles: async function mergeMultipleYmlFiles (
     ...ymlConfigFiles
   ) {
-    return merge(...ymlConfigFiles)
+    return yamlMerge(...ymlConfigFiles)
   },
 
   loadYmlObj: async function loadYmlObj (ymlStrContent) {

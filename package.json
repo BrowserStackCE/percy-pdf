@@ -1,14 +1,15 @@
 {
-    "name": "percy-pdf",
-    "version": "0.3.0",
+    "name": "@samirans89/percy-pdf",
+    "package-name": "@samirans89/percy-pdf",
+    "version": "0.4.6",
+    "type": "module",
     "description": "PDF Document Visual Automation Testing using Percy",
-    "main": "app/run.js",
+    "bin": {
+        "percy-pdf": "./bin/percy-pdf-cli.js"
+      },
+    "main": "index.js",
     "scripts": {
-        "stop-server": "npx forever stopall",
-        "start-server": "npx forever start \"node_modules/http-server/bin/http-server\" \"-s\" \"-p 8080\" \"pdfjs-3.4.120-dist\"",
-        "pretest": "(ver && npx extract-zip %cd%/pdfjs-3.4.120-dist.zip || extract-zip ./pdfjs-3.4.120-dist.zip)",
-        "test": "node app/run.js",
-        "posttest": "npm run stop-server && exit 0"
+        "test": "node index.js"
     },
     "keywords": [
         "percy-pdf",
@@ -17,9 +18,9 @@
         "percy"
     ],
     "author": "samirans89",
-    "license": "Apache License 2.0",
+    "license": "ISC",
     "devDependencies": {
-        "@percy/cli": "^1.27.3",
+        "@percy/cli": "^1.28.7",
         "eslint": "^8.45.0",
         "eslint-config-standard": "^17.1.0",
         "eslint-plugin-import": "^2.27.5",
@@ -27,11 +28,21 @@
         "eslint-plugin-promise": "^6.1.1"
     },
     "dependencies": {
+        "@percy/cli-snapshot": "^1.28.7",
+        "express": "^4.19.2",
         "extract-zip": "^2.0.1",
-        "forever": "^0.14.2",
         "fs": "0.0.1-security",
-        "http-server": "^14.1.1",
+        "glob": "^10.4.1",
         "js-yaml": "^4.1.0",
-        "pdfjs-dist": "2.4.456"
-    }
+        "lodash": "^4.17.21",
+        "pdfjs-dist": "^4.3.136"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/browserstackCE/percy-pdf.git"
+    },
+    "bugs": {
+        "url": "https://github.com/browserstackCE/percy-pdf/issues"
+    },
+    "homepage": "https://github.com/browserstackCE/percy-pdf#readme"
 }

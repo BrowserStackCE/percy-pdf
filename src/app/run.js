@@ -1,24 +1,36 @@
-const utils = require('../helpers/utils')
-const path = require('path')
+import path from 'path'
+
+import { utils } from '../helpers/utils.js'
+import express from 'express'
+import { snapshot } from '@percy/cli-snapshot'
+import extract from 'extract-zip'
+import os from 'os'
+
 let PORT = 8080
 const HOST = 'localhost'
+const PERCY_PDF_HOME_DIR = process.env.PERCY_PDF_HOME_DIR || path.join(os.homedir(), 'percy-pdf-ws')
+const PERCY_PDF_CONFIGS_DIR = path.join(PERCY_PDF_HOME_DIR, 'configs')
+const AUTO_GEN_SNAPSHOT_CONFIGS_DIR = path.join(PERCY_PDF_HOME_DIR, '.dist')
+const STATIC_WEB_ROOT_DIR = path.join(PERCY_PDF_HOME_DIR, 'pdfjs-dist')
+const PERCY_PDF_PROJECTS_DIR = path.join(PERCY_PDF_HOME_DIR, 'pdf-projects')
 
-let defPdfConfigFilePath = '../configs/pdf-run-info.yml'
+const SAMPLE_CONFIGS_DIR = './dist/configs'
+const SAMPLE_PDFJS_DIST_FILE = './dist/pdfjs-dist.zip'
+const SAMPLE_PROJECTS_DIR = './dist/pdf-projects'
+
+let defPdfConfigFilePath = path.join(PERCY_PDF_CONFIGS_DIR, '/getting-started-scenarios/01_pdf-docs-run-info-baseline.yml')
 const acceptableRunModes = {
   configureBaseline: 'create-baseline',
   compareReleaseWithBaseline: 'compare-release-with-baseline'
 }
 const pdfjsServerProjectsDir = path.join(
-  __dirname,
-  '/../pdfjs-3.4.120-dist/web/projects'
+  STATIC_WEB_ROOT_DIR, 'web', 'pdf-projects'
 )
-const userProjectsSourceDir = path.join(__dirname, '/../projects')
+
 const fileEncoding = 'utf8'
 
 let pdfServerBaseUrl = `http://${HOST}:${PORT}`
-const pdfViewerUrlPath = '/web/viewer.html?file=/web/projects'
-
-const percyAutoGenConfigFolder = path.join(__dirname, '/../.dist')
+const pdfViewerUrlPath = '/web/viewer.html?file=/web/pdf-projects'
 const percyAutoGenConfigFileNamePrefix = 'ss_'
 const percyAutoGenConfigFileExt = '.yml'
 const percyDefaultBranchPrefix = 'DOC'
@@ -35,7 +47,8 @@ async function readArgs () {
   // Read PDF Docs Run Info Config File supplied by the user, as the first process argument.
   // If not found, throw an error and stop the run.
   if (args.length > 0) {
-    defPdfConfigFilePath = args[0]
+    defPdfConfigFilePath = path.join(PERCY_PDF_CONFIGS_DIR, args[0])
+    console.info(`Using config file from location: ${defPdfConfigFilePath}`)
 
     // Update PORT is provided by the user, as the second process argument
     if (args[1] != null && !isNaN(args[1])) {
@@ -44,29 +57,44 @@ async function readArgs () {
     }
   } else {
     console.error(
-      'Please provide the PDF Docs Run Info Configs File path, as a Node Process argument. e.g. npm test configs/getting-started-scenarios/01_pdf-docs-run-info-baseline.yml'
+      'Please provide the PDF Docs Run Info Configs File path, as a Node Process argument. e.g. npm test getting-started-scenarios/01_pdf-docs-run-info-baseline.yml'
     )
     process.exit(1)
   }
 }
 
-async function setup () {
-  await utils.startExternalProcess(
-    `npx forever start "node_modules/http-server/bin/http-server" "-s" "-p ${PORT}" "pdfjs-3.4.120-dist"`,
-    { stdio: 'inherit' },
-    null,
-    true
-  )
-  // recreate any existing auto generated folders
-  await utils.recreateFolder(pdfjsServerProjectsDir, true)
-  await utils.recreateFolder(percyAutoGenConfigFolder, true)
+async function buildWSIfNoneExists () {
+  if (utils.fileExists(SAMPLE_CONFIGS_DIR)) {
+    await utils.copyFolder(path.join(process.cwd(), SAMPLE_CONFIGS_DIR), PERCY_PDF_CONFIGS_DIR, true)
+  }
 
-  // copy projects directory from user's project folder to PDFJS local server folder
-  await utils.copyFolder(userProjectsSourceDir, pdfjsServerProjectsDir, true)
+  if (utils.fileExists(SAMPLE_PROJECTS_DIR)) {
+    await utils.copyFolder(path.join(process.cwd(), SAMPLE_PROJECTS_DIR), PERCY_PDF_PROJECTS_DIR, true)
+  }
+}
+
+async function setupAndRunTests () {
+  try {
+    await buildWSIfNoneExists()
+
+    await extract(SAMPLE_PDFJS_DIST_FILE, { dir: PERCY_PDF_HOME_DIR })
+
+    const app = express()
+    app.use(express.static(STATIC_WEB_ROOT_DIR))
+    app.set('view engine', 'html')
+
+    app.listen(PORT, async function () {
+      await serverReady()
+    })
+  } catch (err) {
+    console.error(`Percy PDF setup error: ${err}`)
+  }
 }
 
 async function readPdfDocsRunInfoConfigs () {
-  return await utils.loadYmlObj(await utils.readFile(defPdfConfigFilePath, fileEncoding))
+  return await utils.loadYmlObj(
+    await utils.readFile(defPdfConfigFilePath, fileEncoding)
+  )
 }
 
 async function triggerPercyProcess (
@@ -81,19 +109,11 @@ async function triggerPercyProcess (
       ''
     )} and PERCY_TARGET_BRANCH = ${percyTargetBranch.replace(/\s/g, '')}`
   )
-  await utils.startExternalProcess(
-    'npx',
-    [`percy snapshot "${percyConfigFilePath}"`],
-    {
-      shell: true,
-      stdio: 'inherit',
-      env: {
-        ...process.env,
-        PERCY_BRANCH: `${percyBranch.replace(/\s/g, '')}`,
-        PERCY_TARGET_BRANCH: `${percyTargetBranch.replace(/\s/g, '')}`
-      }
-    }
-  )
+
+  process.env.PERCY_BRANCH = `${percyBranch.replace(/\s/g, '')}`
+  process.env.PERCY_TARGET_BRANCH = `${percyTargetBranch.replace(/\s/g, '')}`
+  snapshot.packageInformation = { name: '@percy/cli-snapshot/1.28.7' }
+  await snapshot([percyConfigFilePath])
 }
 
 function createPdfDocsRunInfoMap (
@@ -203,17 +223,17 @@ async function createPercySnapshotConfig (pdfDocsRunInfoMap) {
       pdfDocsRunInfoMap.includePages.length === 0 &&
       pdfDocsRunInfoMap.excludePages.length === 0
     ) {
-      additionalSnapshotsForEachPage.forEach(object => {
+      additionalSnapshotsForEachPage.forEach((object) => {
         object.execute = percyExecuteScriptReferenceObj
       })
     } else {
-      additionalSnapshotsForEachPage.forEach(object => {
+      additionalSnapshotsForEachPage.forEach((object) => {
         object.execute = percyDynExecuteScriptBeforeSnapshot
       })
     }
 
     if (pdfDocsRunInfoMap.percyConfigs?.waitForTimeout !== undefined) {
-      additionalSnapshotsForEachPage.forEach(object => {
+      additionalSnapshotsForEachPage.forEach((object) => {
         object.waitForTimeout = pdfDocsRunInfoMap.percyConfigs.waitForTimeout
       })
     }
@@ -259,33 +279,51 @@ async function processPdfDocsRunInfoConfigs (rootConfig) {
     if (rootConfig.projectFolders != null) {
       for (const projectFolderName of rootConfig.projectFolders) {
         console.info('Project folder found: ' + projectFolderName)
-        const projectReleaseFolderPath = `./projects/${projectFolderName}/${rootConfig.baselineDir}`
+        const projectReleaseFolderPath = `${pdfjsServerProjectsDir}/${projectFolderName}/${rootConfig.baselineDir}`
         let allIncludedFiles = utils.getFileNames(
           projectReleaseFolderPath,
           '.pdf'
         )
 
         if (rootConfig.includeDocs != null) {
-          allIncludedFiles = await utils.filterDocs(rootConfig.includeDocs, projectFolderName, allIncludedFiles, true)
+          allIncludedFiles = await utils.filterDocs(
+            rootConfig.includeDocs,
+            projectFolderName,
+            allIncludedFiles,
+            true
+          )
         }
 
         if (rootConfig.excludeDocs != null) {
-          allIncludedFiles = await utils.filterDocs(rootConfig.excludeDocs, projectFolderName, allIncludedFiles, false)
+          allIncludedFiles = await utils.filterDocs(
+            rootConfig.excludeDocs,
+            projectFolderName,
+            allIncludedFiles,
+            false
+          )
         }
 
         if (allIncludedFiles.length === 0) {
-          console.warn(`There are no PDF files in the folder ${projectReleaseFolderPath} or they have got excluded based on the PDF Run Info Config file provided.`)
+          console.warn(
+            `There are no PDF files in the folder ${projectReleaseFolderPath} or they have got excluded based on the PDF Run Info Config file provided.`
+          )
           continue
         }
 
         let allIncludedFilesMap = new Map()
 
         if (rootConfig.specialDocConfigs != null) {
-          allIncludedFilesMap = await utils.applySpecialDocConfigs(rootConfig.specialDocConfigs, projectFolderName, allIncludedFiles)
+          allIncludedFilesMap = await utils.applySpecialDocConfigs(
+            rootConfig.specialDocConfigs,
+            projectFolderName,
+            allIncludedFiles
+          )
         }
 
         for (const fileName of allIncludedFiles) {
-          const pdfPageCount = await utils.getPDFPageCount(`${projectReleaseFolderPath}/${fileName}`)
+          const pdfPageCount = await utils.getPDFPageCount(
+            `${projectReleaseFolderPath}/${fileName}`
+          )
 
           const pdfDocsRunInfoMap = createPdfDocsRunInfoMap(
             rootConfig,
@@ -298,13 +336,15 @@ async function processPdfDocsRunInfoConfigs (rootConfig) {
             pdfDocsRunInfoMap
           )
 
-          let ymlSnapshotConfigStr = await utils.dumpObjToStr(snapshotConfigObj)
+          let ymlSnapshotConfigStr = await utils.dumpObjToStr(
+            snapshotConfigObj
+          )
 
           ymlSnapshotConfigStr = await cleanseYmlFile(ymlSnapshotConfigStr)
 
           const percyConfigFilePath = await utils.writeContentToFile(
             ymlSnapshotConfigStr,
-            percyAutoGenConfigFolder,
+            AUTO_GEN_SNAPSHOT_CONFIGS_DIR,
             percyAutoGenConfigFileNamePrefix +
               pdfDocsRunInfoMap.pdfDocId
                 .replace(/\s/g, '')
@@ -337,11 +377,13 @@ async function processPdfDocsRunInfoConfigs (rootConfig) {
 // Used by default to create a single Percy build for all the PDF documents in scope, across User Projects.
 async function triggerConsolidatedPercyRun () {
   const ymlConfigFiles = await utils.listFolderYmlFiles(
-    percyAutoGenConfigFolder
+    AUTO_GEN_SNAPSHOT_CONFIGS_DIR
   )
 
   if (ymlConfigFiles.length !== 0) {
-    const mergedYMLOutput = await utils.mergeMultipleYmlFiles(...ymlConfigFiles)
+    const mergedYMLOutput = await utils.mergeMultipleYmlFiles(
+      ...ymlConfigFiles
+    )
     const mergedFilePath =
       percyAutoGenConfigFileNamePrefix +
       'mergedMultiplePDFDocs' +
@@ -349,32 +391,45 @@ async function triggerConsolidatedPercyRun () {
 
     await utils.writeContentToFile(
       mergedYMLOutput,
-      percyAutoGenConfigFolder,
+      AUTO_GEN_SNAPSHOT_CONFIGS_DIR,
       mergedFilePath,
       fileEncoding
     )
 
     pdfDocsRunInfoMap.runMode === acceptableRunModes.configureBaseline
       ? await triggerPercyProcess(
-          `${percyAutoGenConfigFolder}/${mergedFilePath}`,
+          `${AUTO_GEN_SNAPSHOT_CONFIGS_DIR}/${mergedFilePath}`,
           pdfDocsRunInfoMap.baselineDir,
           pdfDocsRunInfoMap.releaseDir
       )
       : await triggerPercyProcess(
-          `${percyAutoGenConfigFolder}/${mergedFilePath}`,
+          `${AUTO_GEN_SNAPSHOT_CONFIGS_DIR}/${mergedFilePath}`,
           pdfDocsRunInfoMap.releaseDir,
           pdfDocsRunInfoMap.baselineDir
       )
   } else {
-    console.warn(`No Percy YML config files were generated in the ${percyAutoGenConfigFolder} folder. Aborting process.`)
+    console.error(
+      `No Percy YML config files were generated in the ${AUTO_GEN_SNAPSHOT_CONFIGS_DIR} folder. Aborting process.`
+    )
   }
 }
 
-(async () => {
+async function serverReady (error) {
+  let httpServerProcessId = -1
   try {
-    await readArgs()
-    await setup()
-    utils.createDir(percyAutoGenConfigFolder)
+    if (error) throw error
+
+    console.info(`HTTP Server process: ${process.pid} started listening on port ${PORT}.`)
+    httpServerProcessId = process.pid
+
+    // recreate any existing auto generated folders
+    await utils.recreateFolder(pdfjsServerProjectsDir, true)
+    await utils.recreateFolder(AUTO_GEN_SNAPSHOT_CONFIGS_DIR, true)
+
+    // copy projects directory from user's project folder to PDFJS local server folder
+    await utils.copyFolder(PERCY_PDF_PROJECTS_DIR, pdfjsServerProjectsDir, true)
+
+    utils.createDir(AUTO_GEN_SNAPSHOT_CONFIGS_DIR)
     const pdfDocsRunInfoConfigObj = await readPdfDocsRunInfoConfigs()
     await processPdfDocsRunInfoConfigs(pdfDocsRunInfoConfigObj)
     if (
@@ -387,6 +442,20 @@ async function triggerConsolidatedPercyRun () {
     console.error('Encountered Fatal Error: ' + e)
     throw e
   } finally {
-    utils.emptyDir(percyAutoGenConfigFolder)
+    utils.emptyDir(AUTO_GEN_SNAPSHOT_CONFIGS_DIR)
+    utils.emptyDir(STATIC_WEB_ROOT_DIR)
+    process.kill(httpServerProcessId)
   }
-})()
+}
+
+export const app = {
+  runTest: async function runTest () {
+    try {
+      await readArgs()
+      await setupAndRunTests()
+    } catch (e) {
+      console.error('Encountered Fatal Error: ' + e)
+      throw e
+    }
+  }
+}

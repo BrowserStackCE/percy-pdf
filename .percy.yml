@@ -13,4 +13,4 @@ discovery:
   allowedHostnames: []
   disallowedHostnames: []
   networkIdleTimeout: 750
-  device-pixel-ratio: 2
+  
