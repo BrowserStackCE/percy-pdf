@@ -22,7 +22,7 @@ This `percy-pdf` code repository provides an approach to compare your Portable D
       Note: A sample project folder has been provided with this repository (i.e. `insurance-policy-docs`). It further has different folders such as `golden-copy`, `release-v2` indicating different versions of the PDF documents. You can create as many new folders as you'd like for each new release of the PDF document.
 
  2. Create a PDF Run Info Config file within the `./configs` folder. Sample config files are provided here: `./configs` 
- 3. Create an account on [Percy](https://percy.io) and create a new project. Note the Project specific `PERCY_TOKEN`, as this will be required while triggering the project builds.
+ 3. Create an account on [Percy](https://percy.io) and create a new Percy Web project. Note the Project specific `PERCY_TOKEN`, as this will be required while triggering the project builds.
  4. Clone this repository and move to the project folder.
       ```
       git clone git@github.com:BrowserStackCE/percy-pdf.git
